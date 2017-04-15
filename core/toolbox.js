@@ -160,7 +160,7 @@ Blockly.Toolbox.prototype.init = function() {
   // Clicking on toolbox closes popups.
   Blockly.bindEventWithChecks_(this.HtmlDiv, 'mousedown', this,
       function(e) {
-        if (Blockly.isRightButton(e) || e.target == this.HtmlDiv) {
+        if (Blockly.utils.isRightButton(e) || e.target == this.HtmlDiv) {
           // Close flyout.
           Blockly.hideChaff(false);
         } else {
@@ -182,7 +182,8 @@ Blockly.Toolbox.prototype.init = function() {
    * @private
    */
   this.flyout_ = new Blockly.Flyout(workspaceOptions);
-  goog.dom.insertSiblingAfter(this.flyout_.createDom(), workspace.svgGroup_);
+  goog.dom.insertSiblingAfter(this.flyout_.createDom('svg'),
+                              this.workspace_.getParentSvg());
   this.flyout_.init(workspace);
 
   this.config_['cleardotPath'] = workspace.options.pathToMedia + '1x1.gif';
@@ -240,7 +241,6 @@ Blockly.Toolbox.prototype.position = function() {
     return;
   }
   var svg = this.workspace_.getParentSvg();
-  var svgPosition = goog.style.getPageOffset(svg);
   var svgSize = Blockly.svgSize(svg);
   if (this.horizontalLayout_) {
     treeDiv.style.left = '0';
@@ -330,7 +330,7 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
         }
         if (childIn.getAttribute('expanded') == 'true') {
           if (childOut.blocks.length) {
-            // This is a category that directly contians blocks.
+            // This is a category that directly contains blocks.
             // After the tree is rendered, open this category and show flyout.
             openNode = childOut;
           }
@@ -456,7 +456,7 @@ Blockly.Toolbox.prototype.refreshSelection = function() {
 // Extending Closure's Tree UI.
 
 /**
- * Extention of a TreeControl object that uses a custom tree node.
+ * Extension of a TreeControl object that uses a custom tree node.
  * @param {Blockly.Toolbox} toolbox The parent toolbox for this tree.
  * @param {Object} config The configuration for the tree. See
  *    goog.ui.tree.TreeControl.DefaultConfig.
@@ -476,9 +476,9 @@ goog.inherits(Blockly.Toolbox.TreeControl, goog.ui.tree.TreeControl);
 Blockly.Toolbox.TreeControl.prototype.enterDocument = function() {
   Blockly.Toolbox.TreeControl.superClass_.enterDocument.call(this);
 
-  var el = this.getElement();
   // Add touch handler.
   if (goog.events.BrowserFeature.TOUCH_ENABLED) {
+    var el = this.getElement();
     Blockly.bindEventWithChecks_(el, goog.events.EventType.TOUCHSTART, this,
         this.handleTouchEvent_);
   }
@@ -585,7 +585,7 @@ Blockly.Toolbox.TreeNode = function(toolbox, html, opt_config, opt_domHelper) {
 goog.inherits(Blockly.Toolbox.TreeNode, goog.ui.tree.TreeNode);
 
 /**
- * Supress population of the +/- icon.
+ * Suppress population of the +/- icon.
  * @return {!goog.html.SafeHtml} The source for the icon.
  * @override
  */
@@ -612,7 +612,7 @@ Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
 };
 
 /**
- * Supress the inherited double-click behaviour.
+ * Suppress the inherited double-click behaviour.
  * @param {!goog.events.BrowserEvent} e The browser event.
  * @override
  * @private
@@ -632,8 +632,8 @@ Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
 Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
   if (this.tree.toolbox_.horizontalLayout_) {
     var map = {};
-    var next = goog.events.KeyCodes.DOWN
-    var prev = goog.events.KeyCodes.UP
+    var next = goog.events.KeyCodes.DOWN;
+    var prev = goog.events.KeyCodes.UP;
     map[goog.events.KeyCodes.RIGHT] = this.rightToLeft_ ? prev : next;
     map[goog.events.KeyCodes.LEFT] = this.rightToLeft_ ? next : prev;
     map[goog.events.KeyCodes.UP] = goog.events.KeyCodes.LEFT;

@@ -24,6 +24,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.Css
+ * @namespace
+ */
 goog.provide('Blockly.Css');
 
 
@@ -136,6 +140,7 @@ Blockly.Css.CONTENT = [
     'background-color: #fff;',
     'outline: none;',
     'overflow: hidden;',  /* IE overflows by default. */
+    'position: absolute;',
     'display: block;',
   '}',
 
@@ -148,6 +153,7 @@ Blockly.Css.CONTENT = [
   '.injectionDiv {',
     'height: 100%;',
     'position: relative;',
+    'overflow: hidden;', /* So blocks in drag surface disappear at edges */
   '}',
 
   '.blocklyNonSelectable {',
@@ -155,6 +161,25 @@ Blockly.Css.CONTENT = [
     '-moz-user-select: none;',
     '-webkit-user-select: none;',
     '-ms-user-select: none;',
+  '}',
+
+  '.blocklyWsDragSurface {',
+    'display: none;',
+    'position: absolute;',
+    'overflow: visible;',
+    'top: 0;',
+    'left: 0;',
+  '}',
+
+  '.blocklyBlockDragSurface {',
+    'display: none;',
+    'position: absolute;',
+    'top: 0;',
+    'left: 0;',
+    'right: 0;',
+    'bottom: 0;',
+    'overflow: visible !important;',
+    'z-index: 50;', /* Display below toolbox, but above everything else. */
   '}',
 
   '.blocklyTooltipDiv {',
@@ -258,6 +283,10 @@ Blockly.Css.CONTENT = [
     'fill: #000;',
   '}',
 
+  '.blocklyFlyout {',
+    'position: absolute;',
+    'z-index: 20;',
+  '}',
   '.blocklyFlyoutButton {',
     'fill: #888;',
     'cursor: default;',
@@ -283,15 +312,11 @@ Blockly.Css.CONTENT = [
     'fill: #000;',
   '}',
 
-  '.blocklyFlyoutLabelText:hover {',
-    'fill: #aaa;',
-  '}',
-
   /*
     Don't allow users to select text.  It gets annoying when trying to
     drag a block and selected text moves instead.
   */
-  '.blocklySvg text {',
+  '.blocklySvg text, .blocklyBlockDragSurface text {',
     'user-select: none;',
     '-moz-user-select: none;',
     '-webkit-user-select: none;',
@@ -365,6 +390,19 @@ Blockly.Css.CONTENT = [
     'fill-opacity: .8;',
   '}',
 
+  '.blocklyMainWorkspaceScrollbar {',
+    'z-index: 20;',
+  '}',
+
+  '.blocklyFlyoutScrollbar {',
+    'z-index: 30;',
+  '}',
+
+  '.blocklyScrollbarHorizontal, .blocklyScrollbarVertical {',
+    'position: absolute;',
+    'outline: none;',
+  '}',
+
   '.blocklyScrollbarBackground {',
     'opacity: 0;',
   '}',
@@ -426,6 +464,7 @@ Blockly.Css.CONTENT = [
     'stroke: #f00;',
     'stroke-width: 2;',
     'stroke-linecap: round;',
+    'pointer-events: none;',
   '}',
 
   '.blocklyContextMenu {',
@@ -448,6 +487,7 @@ Blockly.Css.CONTENT = [
     'overflow-x: visible;',
     'overflow-y: auto;',
     'position: absolute;',
+    'z-index: 70;', /* so blocks go under toolbox when dragging */
   '}',
 
   '.blocklyTreeRoot {',
